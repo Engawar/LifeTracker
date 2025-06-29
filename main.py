@@ -117,7 +117,12 @@ if __name__ == "__main__":
     # Create a lock file to prevent multiple instances
     # Note: This is a simple implementation. For more robust solutions,
     # consider using a library that handles atomic file locking.
-    lock_file_path = Path(os.environ["TEMP"]).absolute() / "lifetracker.lock"
+    if getattr(sys, 'frozen', False):
+        l_application_path = Path(sys.executable).parent
+    else:
+        l_application_path = Path(__file__).parent
+
+    lock_file_path = Path(l_application_path.absolute()) / "lifetracker.lock"
 
     try:
         # Exclusive creation mode ('x') raises FileExistsError if the file already exists.
